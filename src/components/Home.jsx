@@ -17,8 +17,12 @@ import interior2 from '../assets/interior2.png'
 import interior3 from '../assets/interior3.png'
 import interior4 from '../assets/interior4.png'
 import FooterCarousel from './FooterCarousel'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+
+  let navigate = useNavigate();
+
   return (
     <div className="pt-32 md:pt-28 bg-white">
 
@@ -33,7 +37,9 @@ const Home = () => {
         <p className='font-semibold text-gray-700 max-w-3xl text-center mb-4'>
           At Home Haven, we believe that your living space should be a reflection of your personality and a sanctuary where you can unwind and recharge. Our mission is to provide you with high-quality furniture and decor that not only enhances the aesthetics of your home but also promotes comfort and functionality.
         </p>
-        <button className="bg-gradient-to-r from-green-600 to-green-500 font-semibold rounded-full text-white px-6 py-2 mt-2 transition transform duration-300 hover:from-green-500 hover:to-green-400 hover:scale-105">
+        <button onClick={() => {
+          navigate("/contact#contact-form");
+        }} className="bg-gradient-to-r from-green-600 to-green-500 font-semibold rounded-full text-white px-6 py-2 mt-2 transition transform duration-300 hover:from-green-500 hover:to-green-400 hover:scale-105">
           Grab a Free Estimate
         </button>
       </div>
