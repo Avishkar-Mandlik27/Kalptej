@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import img from "../assets/contactus.png";
+import img from "../assets/contactUs.png";
 import { MdLocationPin, MdEmail, MdPhone } from 'react-icons/md';
 
 const ContactUs = () => {
