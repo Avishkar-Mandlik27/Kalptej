@@ -13,8 +13,8 @@ const ContactUs = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [errors, setErrors] = useState({}); // ✅ Track validation errors
 
-    // Google Apps Script Web App URL
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDg3sGZUgAxRCKDgImeDofvCQhlSg9o2dVlKmu30iCysbK9WTF8030pY8ZC5yUSq10/exec';
 
     const handleChange = (e) => {
@@ -22,12 +22,34 @@ const ContactUs = () => {
             ...state,
             [e.target.name]: e.target.value
         });
+        setErrors({ ...errors, [e.target.name]: "" }); // Clear error as user types
+    };
+
+    const validate = () => {
+        const newErrors = {};
+
+        // Email validation
+        if (state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)) {
+            newErrors.email = "Please enter a valid email address.";
+        }
+
+        // Phone validation (if entered)
+        if (state.phone && !/^\d{10}$/.test(state.phone)) {
+            newErrors.phone = "Phone number must be 10 digits.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
         setSubmitStatus(null);
+
+        // ✅ Validate before submission
+        if (!validate()) return;
+
+        setIsSubmitting(true);
 
         try {
             const formData = new FormData();
@@ -78,16 +100,15 @@ const ContactUs = () => {
 
             {/* Form Section */}
             <div className='w-full flex flex-col md:flex-row justify-center items-center md:items-start py-10 px-4 sm:px-8 md:px-16 bg-white gap-10 text-left'>
+                
                 {/* Info Section */}
                 <div className='w-full md:w-[50%] max-w-xl space-y-6'>
                     <h2 className='text-2xl font-semibold text-green-800'>Get in Touch</h2>
                     <p className='text-gray-600'>
-                        We would love to hear from you! Whether you have a question about our services, pricing, need a demo, or anything else, our team is ready to answer all your questions. Fill out the form and we will get back to you as soon as possible.
+                        We would love to hear from you! Whether you have a question about our services, pricing, need a demo, or anything else, our team is ready to answer all your questions.
                     </p>
 
-                    {/* Contact Details */}
                     <div className='space-y-4'>
-                        {/* Location */}
                         <div className='flex items-center space-x-3'>
                             <div className='bg-amber-100 p-2 rounded-full'>
                                 <MdLocationPin className='text-amber-400 text-2xl sm:text-xl' />
@@ -97,7 +118,6 @@ const ContactUs = () => {
                             </p>
                         </div>
 
-                        {/* Email */}
                         <div className='flex items-center space-x-3'>
                             <div className='bg-amber-100 p-2 rounded-full'>
                                 <MdEmail className='text-amber-400 text-2xl sm:text-xl' />
@@ -107,7 +127,6 @@ const ContactUs = () => {
                             </p>
                         </div>
 
-                        {/* Phone */}
                         <div className='flex items-center space-x-3'>
                             <div className='bg-amber-100 p-2 rounded-full'>
                                 <MdPhone className='text-amber-400 text-2xl sm:text-xl' />
@@ -124,7 +143,6 @@ const ContactUs = () => {
                     className='w-full md:w-[50%] max-w-xl bg-white shadow-md rounded-lg p-6 space-y-4'
                     onSubmit={handleSubmit}
                 >
-                    {/* Status Messages */}
                     {submitStatus === 'success' && (
                         <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
                             ✅ Thank you! Your message has been sent successfully.
@@ -158,12 +176,13 @@ const ContactUs = () => {
                             id="email"
                             name="email"
                             placeholder="Your Email"
-                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+                            className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'}`}
                             onChange={handleChange}
                             value={state.email}
                             required
                             disabled={isSubmitting}
                         />
+                        {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
                     </div>
 
                     <div>
@@ -173,11 +192,12 @@ const ContactUs = () => {
                             id="phone"
                             name="phone"
                             placeholder="Your Phone Number"
-                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+                            className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-green-500'}`}
                             onChange={handleChange}
                             value={state.phone}
                             disabled={isSubmitting}
                         />
+                        {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone}</p>}
                     </div>
 
                     <div>
@@ -212,8 +232,8 @@ const ContactUs = () => {
                     <button
                         type="submit"
                         className={`w-full px-6 py-2 rounded-md transition-colors duration-300 ${isSubmitting
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-green-500 hover:bg-green-600'
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-green-500 hover:bg-green-600'
                             } text-white`}
                         disabled={isSubmitting}
                     >
@@ -228,3 +248,4 @@ const ContactUs = () => {
 };
 
 export default ContactUs;
+ 
