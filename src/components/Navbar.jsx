@@ -41,7 +41,7 @@ const Navbar = () => {
 
       {isOpen && (
         <ul className="md:hidden bg-white/80 backdrop-blur-md w-full text-center space-y-4 pb-4 shadow-md shadow-gray-200/50">
-          {["Home", "About Us", "Services", "Portfolio", "Resources", "Contact Us"].map((val, i) => (
+          {["Home", "About Us", "Services","Contact Us"].map((val, i) => (
             <li
               key={i}
               className="hover:text-green-700 cursor-pointer transition-colors duration-200"
