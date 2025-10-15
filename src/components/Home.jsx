@@ -82,7 +82,7 @@ const Home = () => {
 
       <div className='w-full text-green-800 flex flex-col justify-center items-center pt-8 pb-4'>
         <h1 className='text-2xl md:text-3xl font-semibold'>Join our list of clients</h1>
-        <div className='w-full max-w-6xl h-[40vh]'>
+        <div className='w-full max-w-6xl h-[25vh]'>
           <FooterCarousel />
         </div>
       </div>

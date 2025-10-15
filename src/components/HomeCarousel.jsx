@@ -15,6 +15,7 @@ const quotes = [
 ];
 
 const HomeCarousel = () => {
+  
   return (
     <div className="w-full h-[80vh] overflow-hidden">
       <Carousel interval={2500} controls indicators fade>

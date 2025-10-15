@@ -3,6 +3,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import App from '../src/App'
 import Home from '../src/components/Home'
 import About from '../src/components/About'
+import Services from '../src/components/Services'
+import ContactUs from '../src/components/ContactUs'
 
 export let routes = createBrowserRouter([{
 
@@ -23,7 +25,7 @@ export let routes = createBrowserRouter([{
         },
         {
             path : "/services",
-            element : <div>Services</div>
+            element : <Services/>
         },
         {
             path : "/portfolio",
@@ -33,6 +35,10 @@ export let routes = createBrowserRouter([{
             path : "/resources",
             element : <div>Resources</div>
         },
+        {
+            path : "/contact",
+            element :<ContactUs/>
+        }
     ]
 },
 ])
