@@ -92,7 +92,7 @@ const Home = () => {
           <FooterCarousel />
         </div>
       </div>
-
+    
     </div>
   )
 }

@@ -6,8 +6,16 @@ const ContactUs = () => {
     const [state, setState] = useState({
         name: "",
         email: "",
+        phone: "",
+        subject: "",
         message: ""
     });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
+
+    // Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDg3sGZUgAxRCKDgImeDofvCQhlSg9o2dVlKmu30iCysbK9WTF8030pY8ZC5yUSq10/exec';
 
     const handleChange = (e) => {
         setState({
@@ -16,9 +24,38 @@ const ContactUs = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(state);
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const formData = new FormData();
+            formData.append('name', state.name);
+            formData.append('email', state.email);
+            formData.append('phone', state.phone);
+            formData.append('subject', state.subject);
+            formData.append('message', state.message);
+
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.result === 'success') {
+                setSubmitStatus('success');
+                setState({ name: "", email: "", phone: "", subject: "", message: "" });
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -31,8 +68,8 @@ const ContactUs = () => {
                     alt="Contact Us Background"
                 />
                 <div className="absolute inset-0 flex flex-col justify-center items-start text-left px-6 sm:px-20 md:px-28 lg:px-32 xl:px-40 pt-52">
-                    <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold 
-                         bg-gradient-to-r from-green-300 via-white to-amber-400 
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold
+                         bg-gradient-to-r from-green-300 via-white to-amber-400
                          bg-clip-text text-transparent drop-shadow-xl leading-tight">
                         Contact Us
                     </h1>
@@ -84,12 +121,23 @@ const ContactUs = () => {
 
                 {/* Form */}
                 <form
-                    id="contact-form"
                     className='w-full md:w-[50%] max-w-xl bg-white shadow-md rounded-lg p-6 space-y-4'
                     onSubmit={handleSubmit}
                 >
+                    {/* Status Messages */}
+                    {submitStatus === 'success' && (
+                        <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
+                            ✅ Thank you! Your message has been sent successfully.
+                        </div>
+                    )}
+                    {submitStatus === 'error' && (
+                        <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>
+                            ❌ Sorry, there was an error. Please try again.
+                        </div>
+                    )}
+
                     <div>
-                        <label htmlFor="name" className='block text-sm font-medium text-green-800 mb-1'>Name</label>
+                        <label htmlFor="name" className='block text-sm font-medium text-green-800 mb-1'>Name *</label>
                         <input
                             type="text"
                             id="name"
@@ -98,11 +146,13 @@ const ContactUs = () => {
                             className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
                             onChange={handleChange}
                             value={state.name}
+                            required
+                            disabled={isSubmitting}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="email" className='block text-sm font-medium text-green-800 mb-1'>Email</label>
+                        <label htmlFor="email" className='block text-sm font-medium text-green-800 mb-1'>Email *</label>
                         <input
                             type="email"
                             id="email"
@@ -111,11 +161,41 @@ const ContactUs = () => {
                             className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
                             onChange={handleChange}
                             value={state.email}
+                            required
+                            disabled={isSubmitting}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="message" className='block text-sm font-medium text-green-800 mb-1'>Message</label>
+                        <label htmlFor="phone" className='block text-sm font-medium text-green-800 mb-1'>Phone</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Your Phone Number"
+                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+                            onChange={handleChange}
+                            value={state.phone}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="subject" className='block text-sm font-medium text-green-800 mb-1'>Subject</label>
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            placeholder="Subject"
+                            className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+                            onChange={handleChange}
+                            value={state.subject}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="message" className='block text-sm font-medium text-green-800 mb-1'>Message *</label>
                         <textarea
                             id="message"
                             name="message"
@@ -124,14 +204,20 @@ const ContactUs = () => {
                             className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
                             onChange={handleChange}
                             value={state.message}
+                            required
+                            disabled={isSubmitting}
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition-colors duration-300'
+                        className={`w-full px-6 py-2 rounded-md transition-colors duration-300 ${isSubmitting
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-green-500 hover:bg-green-600'
+                            } text-white`}
+                        disabled={isSubmitting}
                     >
-                        Submit
+                        {isSubmitting ? 'Sending...' : 'Submit'}
                     </button>
                 </form>
             </div>

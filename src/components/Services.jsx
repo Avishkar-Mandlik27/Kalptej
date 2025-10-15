@@ -98,7 +98,7 @@ const Services = () => {
         })}
       </div>
 
-            <span className='h-[1px] w-[75%] bg-black mt-32'></span>
+       <span className='h-[1px] w-[75%] bg-black mt-32'></span>
     </div>
   );
 };
