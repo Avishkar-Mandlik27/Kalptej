@@ -1,48 +1,132 @@
 import React, { useState } from 'react';
 import img from "../assets/services.png";
+import ServiceAccordion from './ServiceAccordion';
+import WelcomePopup from './WelcomePopup';
 
-const serviceCards = [
+export const serviceCards = [
   {
-    title: "Tailored Luxury Interiors",
-    description: "We specialize in crafting bespoke spaces that reflect your personality and elevate your lifestyle. From initial concept to final styling, our designs are curated to embody elegance, comfort, and individuality—whether it's a serene bedroom retreat or a statement-making living room."
+    title: "Interior Design & Renovation",
+    items: [
+      "Complete home interiors (2BHK / 3BHK / Villas)",
+      "Modular kitchens (matte finish, handleless design)",
+      "False ceiling, lighting, and smart storage",
+      "Material selection & on-site supervision",
+      "3D design & BOQ support"
+    ],
+    price: "₹1,700 – ₹2,200 per sq.ft (Pune Market Average)"
   },
   {
-    title: "End-to-End Project Management",
-    description: "From concept to completion, we handle every detail—design, sourcing, execution—with precision. Our dedicated team coordinates timelines, budgets, and vendor relationships to ensure a seamless experience and flawless delivery of your dream space."
+    title: "Greenery & Biophilic Design",
+    items: [
+      "Indoor plants, planters & layout planning",
+      "Vertical gardens (residential / commercial)",
+      "Balcony, terrace & courtyard green design",
+      "Self-watering and drip irrigation systems",
+      "Maintenance contracts available"
+    ],
+    price: [
+      "Indoor setup: ₹300 – ₹800 per sq.ft",
+      "Vertical garden: ₹1,200 – ₹2,000 per sq.ft"
+    ]
   },
   {
-    title: "Premium Material Selection",
-    description: "Only the finest woods, fabrics, stones, and finishes—curated for timeless elegance and durability. We source globally and locally to offer materials that elevate the aesthetic and longevity of your interiors, ensuring every surface tells a story of quality."
+    title: "Commercial Interiors",
+    items: [
+      "Office design with acoustic panels & greenery",
+      "Cafés, hotels & resort landscaping",
+      "Biophilic corporate design (living walls, planters)",
+      "Custom partitions & green branding"
+    ],
+    price: "₹1,800 – ₹2,500 per sq.ft"
   },
   {
-    title: "Space Optimization & Layout Planning",
-    description: "Intelligent design that maximizes functionality without compromising aesthetics. We analyze flow, lighting, and usage to create layouts that feel spacious, intuitive, and tailored to your lifestyle—whether it's a compact apartment or a sprawling villa."
+    title: "Landscaping & Outdoor Solutions",
+    items: [
+      "Villa, farmhouse, and resort landscaping",
+      "Hardscape + softscape design",
+      "Outdoor lighting & irrigation setup",
+      "Tree and plant selection based on soil & sunlight",
+      "Pathway, lawn & seating design"
+    ],
+    price: "₹1,000 – ₹1,800 per sq.ft"
   },
   {
-    title: "Color & Texture Harmony",
-    description: "Expert palette coordination to create mood, depth, and visual flow throughout your space. We blend tones, textures, and finishes to evoke emotion and balance, ensuring each room transitions beautifully into the next."
+    title: "Turnkey Execution",
+    items: [
+      "Design + Material + Labour + Supervision",
+      "Single point contact — from concept to completion",
+      "Civil, electrical, plumbing, carpentry, and finishing",
+      "Transparent costing with progress tracking"
+    ],
+    price: "₹5–₹35 Lakhs depending on scope & area"
   },
   {
-    title: "Custom Furniture & Décor",
-    description: "Handcrafted pieces tailored to your space, style, and comfort preferences. From bespoke sofas to artisanal lighting, we design and commission furniture that fits perfectly and adds character to your interiors."
-  },
-  {
-    title: "Lighting Design Expertise",
-    description: "Ambient, task, and accent lighting layered to enhance mood and highlight architectural features. We design lighting schemes that transform spaces—making them warm, dramatic, or serene—while ensuring energy efficiency and control."
-  },
-  {
-    title: "On-Site Execution by Skilled Craftsmen",
-    description: "Our team of vetted professionals ensures flawless installation and finishing. With attention to detail and respect for your space, our craftsmen bring designs to life with precision, care, and artistry."
-  },
-  {
-    title: "Residential & Commercial Expertise",
-    description: "Whether it’s a villa, apartment, or office—we bring sophistication to every square foot. Our portfolio spans luxury homes, boutique hotels, and corporate spaces, each tailored to reflect brand identity and personal taste."
-  },
-  {
-    title: "3D Visualization & Virtual Walkthroughs",
-    description: "See your dream space before it’s built with immersive design previews. Our advanced 3D renderings and virtual tours allow you to explore layouts, finishes, and lighting in real time—making decisions with confidence and clarity."
+    title: "Maintenance & AMC Packages",
+    items: [
+      "Plant care (watering, pruning, fertilizer)",
+      "Vertical garden inspection",
+      "Light and irrigation system checks",
+      "Monthly / Quarterly / Annual maintenance options"
+    ]
   }
 ];
+
+const maintenancePlans = {
+  title: "Maintenance Plan Comparison",
+  columns: ["Plan", "Frequency", "Price (₹/month)", "Description"],
+  rows: [
+    {
+      "Plan": "Basic",
+      "Frequency": "Once a month",
+      "Price (₹/month)": "₹999",
+      "Description": "Basic plant care & trimming"
+    },
+    {
+      "Plan": "Standard",
+      "Frequency": "Twice a month",
+      "Price (₹/month)": "₹1,999",
+      "Description": "Watering, fertilizing & replacements"
+    },
+    {
+      "Plan": "Premium",
+      "Frequency": "Weekly",
+      "Price (₹/month)": "₹3,999",
+      "Description": "Full care + replacements + inspection report"
+    }
+  ]
+};
+
+const packagePlans = {
+  title: "Green Package Comparison",
+  columns: ["Package", "Ideal For", "Scope", "Approx. Cost"],
+  rows: [
+    {
+      "Package": "Essential Plan",
+      "Ideal For": "1BHK / Compact spaces",
+      "Scope": "Design consultation + BOQ + Layout + Plant setup",
+      "Approx. Cost": "₹45,000 – ₹75,000"
+    },
+    {
+      "Package": "Smart Green Plan",
+      "Ideal For": "2BHK / Small Office",
+      "Scope": "3D design + Material selection + Execution + Vertical garden",
+      "Approx. Cost": "₹1.2 – ₹1.8 Lakhs"
+    },
+    {
+      "Package": "Luxury Nature Plan",
+      "Ideal For": "3BHK / Villas / Resorts",
+      "Scope": "Turnkey interiors + Greenery + Maintenance contract",
+      "Approx. Cost": "₹4 – ₹10 Lakhs"
+    },
+    {
+      "Package": "Corporate Plan",
+      "Ideal For": "Offices, Cafés, Hotels",
+      "Scope": "Custom design + Branding + Acoustic & Green walls",
+      "Approx. Cost": "₹1,800 – ₹2,500 per sq.ft"
+    }
+  ],
+  note: "All prices include Pune labour & transportation rates (2025), GST extra."
+};
 
 const Services = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -53,6 +137,9 @@ const Services = () => {
 
   return (
     <div className='w-full flex flex-col items-center justify-center mt-10 mb-20'>
+      
+      <WelcomePopup/>
+
       {/* Hero Section */}
       <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative rounded-b-2xl border-[2px] overflow-hidden">
         <img
@@ -71,6 +158,10 @@ const Services = () => {
       <div className='w-full max-w-[1600px] grid grid-cols-2 gap-x-4 gap-y-16 px-4 sm:px-6 md:px-12 lg:px-20 mt-16'>
         {serviceCards.map((card, index) => {
           const isExpanded = expandedIndex === index;
+          const priceText = Array.isArray(card.price)
+            ? card.price.join(', ')
+            : card.price || 'Price on request';
+
           return (
             <div
               key={index}
@@ -82,9 +173,19 @@ const Services = () => {
                   <span className="block h-[2px] bg-amber-300 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
                 </span>
               </h2>
-              <p className={`text-sm sm:text-base md:text-lg text-gray-600 ${isExpanded ? '' : 'line-clamp-3'} sm:line-clamp-none`}>
-                {card.description}
-              </p>
+
+              <ul className={`text-sm sm:text-base md:text-lg text-gray-600 list-disc pl-4 ${isExpanded ? '' : 'line-clamp-3'} sm:line-clamp-none`}>
+                {card.items.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+
+              {card.price && (
+                <p className="mt-4 text-sm sm:text-base text-gray-700 font-medium">
+                  <span className="text-green-700">Pricing:</span> {priceText}
+                </p>
+              )}
+
               <div className="sm:hidden">
                 <button
                   onClick={() => toggleExpand(index)}
@@ -98,9 +199,18 @@ const Services = () => {
         })}
       </div>
 
-       <span className='h-[1px] w-[75%] bg-black mt-32'></span>
+
+      {/* Accordion Section */}
+      <div className="w-full max-w-4xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-32"> 
+        <ServiceAccordion />
+      </div>
+
+      <span className='h-[1px] w-[75%] bg-black mt-32'></span>
     </div>
   );
 };
 
 export default Services;
+
+
+
