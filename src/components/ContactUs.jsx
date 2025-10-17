@@ -19,15 +19,13 @@ const ContactUs = () => {
   const GOOGLE_SCRIPT_URL =
     'https://script.google.com/macros/s/AKfycbwkjZtf8_tR6JjssLY3G5n_q1Se3w5jHx8h67B8Wpxuxf65K7AITbyJha8Iq25_JfApcQ/exec';
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "phone") {
-      let digits = value.replace(/\D/g, ""); // keep only numbers
-      if (digits.length > 10) digits = digits.slice(0, 10); // max 10 digits
+      let digits = value.replace(/\D/g, "");
+      if (digits.length > 10) digits = digits.slice(0, 10);
 
-      // Check if first digit is between 5–9
       if (digits.length > 0 && !/^[5-9]/.test(digits)) {
         setErrors((prev) => ({
           ...prev,
@@ -43,7 +41,6 @@ const ContactUs = () => {
     }
   };
 
-  // Validate form
   const validateForm = () => {
     const newErrors = {};
 
@@ -67,13 +64,11 @@ const ContactUs = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitStatus(null);
 
     if (!validateForm()) return;
-
     setIsSubmitting(true);
 
     try {
@@ -136,7 +131,6 @@ const ContactUs = () => {
             We would love to hear from you! Whether you have a question about our services, pricing, need a demo, or anything else, our team is ready to answer all your questions.
           </p>
 
-          {/* Contact Details */}
           <div className='space-y-4'>
             {/* Location */}
             <div className='flex items-start space-x-4 p-4 h-24 bg-gradient-to-r from-green-50 to-amber-50 rounded-xl border border-green-100 hover:shadow-lg transition-all duration-300 group'>
@@ -188,7 +182,6 @@ const ContactUs = () => {
           className='w-full md:w-[50%] max-w-xl bg-white shadow-md rounded-lg p-6 space-y-4'
           onSubmit={handleSubmit}
         >
-          {/* Status Messages */}
           {submitStatus === 'success' && (
             <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
               ✅ Thank You! Your request was submitted successfully. We will get back to you soon!
@@ -208,6 +201,7 @@ const ContactUs = () => {
               id="name"
               name="name"
               placeholder="Your Name"
+              maxLength={50}
               className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.name ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.name}
@@ -224,6 +218,7 @@ const ContactUs = () => {
               id="email"
               name="email"
               placeholder="Your Email"
+              maxLength={100}
               className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.email ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.email}
@@ -250,6 +245,7 @@ const ContactUs = () => {
                 id="phone"
                 name="phone"
                 placeholder="Enter 10-digit number"
+                maxLength={10}
                 className="w-full px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none bg-white"
                 onChange={handleChange}
                 value={state.phone.replace("+91", "")}
@@ -267,6 +263,7 @@ const ContactUs = () => {
               id="subject"
               name="subject"
               placeholder="Subject"
+              maxLength={100}
               className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.subject ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.subject}
@@ -281,8 +278,9 @@ const ContactUs = () => {
             <textarea
               id="message"
               name="message"
-              placeholder="Your Message"
+              placeholder="Your Message (max 500 characters)"
               rows="4"
+              maxLength={500}
               className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.message ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.message}
