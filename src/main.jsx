@@ -6,12 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { RouterProvider } from 'react-router-dom';
 import { routes } from '../Router/KalptejRoutes.jsx';
 import { PopupProvider } from './components/PopupProvider.jsx';
+import { WhatsAppProvider } from './components/WhatsAppContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <PopupProvider>
-  <RouterProvider router={routes} >
-    <App />
-  </RouterProvider>
+    <WhatsAppProvider>
+      <RouterProvider router={routes} >
+        <App />
+      </RouterProvider>
+    </WhatsAppProvider>
   </PopupProvider>
   ,
 )

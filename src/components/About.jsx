@@ -9,13 +9,13 @@ const About = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex flex-col items-center">
+      <div className="pt-20 sm:pt-20 md:pt-28 bg-white">
 
       {/* Promotional Banner Popup */}
       <WelcomePopup />
 
       {/* Hero Section */}
-      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative rounded-b-2xl border-2 overflow-hidden">
+      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative border-2 overflow-hidden">
         <img
           src={img}
           className="absolute inset-0 w-full h-full object-cover brightness-75"

@@ -12,23 +12,69 @@ const ContactUs = () => {
     message: ""
   });
 
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  // Google Apps Script Web App URL
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkjZtf8_tR6JjssLY3G5n_q1Se3w5jHx8h67B8Wpxuxf65K7AITbyJha8Iq25_JfApcQ/exec';
+  const GOOGLE_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycbwkjZtf8_tR6JjssLY3G5n_q1Se3w5jHx8h67B8Wpxuxf65K7AITbyJha8Iq25_JfApcQ/exec';
 
+  // Handle input changes
   const handleChange = (e) => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    if (name === "phone") {
+      let digits = value.replace(/\D/g, ""); // keep only numbers
+      if (digits.length > 10) digits = digits.slice(0, 10); // max 10 digits
+
+      // Check if first digit is between 5–9
+      if (digits.length > 0 && !/^[5-9]/.test(digits)) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: "Phone number must start with digits 5–9.",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, phone: "" }));
+      }
+
+      setState((prev) => ({ ...prev, phone: "+91" + digits }));
+    } else {
+      setState({ ...state, [name]: value });
+    }
   };
 
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!state.name.trim()) newErrors.name = "Name is required.";
+    if (!state.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)) {
+      newErrors.email = "Please enter a valid email.";
+    }
+
+    if (!state.phone.trim() || state.phone.length !== 13) {
+      newErrors.phone = "Please enter a valid 10-digit phone number with +91.";
+    } else if (!/^\+91[5-9]\d{9}$/.test(state.phone)) {
+      newErrors.phone = "Phone number must start with digits 5–9.";
+    }
+
+    if (!state.subject.trim()) newErrors.subject = "Subject is required.";
+    if (!state.message.trim()) newErrors.message = "Message cannot be empty.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitStatus(null);
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -44,10 +90,11 @@ const ContactUs = () => {
       });
 
       const result = await response.json();
-      
+
       if (result.result === 'success') {
         setSubmitStatus('success');
         setState({ name: "", email: "", phone: "", subject: "", message: "" });
+        setErrors({});
       } else {
         setSubmitStatus('error');
       }
@@ -60,12 +107,11 @@ const ContactUs = () => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center'>
-
-        <WelcomePopup/>
+    <div className="pt-20 sm:pt-20 md:pt-28 bg-white">
+      <WelcomePopup />
 
       {/* Hero Section */}
-      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative rounded-b-2xl border-[2px] overflow-hidden">
+      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative border-[2px] overflow-hidden">
         <img
           src={img}
           className="absolute inset-0 w-full h-full object-cover brightness-75"
@@ -82,11 +128,12 @@ const ContactUs = () => {
 
       {/* Form Section */}
       <div className='w-full flex flex-col md:flex-row justify-center items-center md:items-start py-10 px-4 sm:px-8 md:px-16 bg-white gap-10 text-left'>
+
         {/* Info Section */}
         <div className='w-full md:w-[50%] max-w-xl space-y-6'>
           <h2 className='text-2xl font-semibold text-green-800'>Get in Touch</h2>
           <p className='text-gray-600'>
-            We would love to hear from you! Whether you have a question about our services, pricing, need a demo, or anything else, our team is ready to answer all your questions. Fill out the form and we will get back to you as soon as possible.
+            We would love to hear from you! Whether you have a question about our services, pricing, need a demo, or anything else, our team is ready to answer all your questions.
           </p>
 
           {/* Contact Details */}
@@ -103,28 +150,34 @@ const ContactUs = () => {
             </div>
 
             {/* Email */}
-            <div className='flex items-center space-x-4 p-3 h-24 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100 hover:shadow-lg transition-all duration-300 group cursor-pointer'
-                 onClick={() => window.open('mailto:swapnil.pawar@kalptej.com', '_blank')}>
+            <div className='flex items-center space-x-4 p-3 h-24 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100 hover:shadow-lg transition-all duration-300 group cursor-pointer'>
               <div className='bg-gradient-to-br from-amber-400 to-orange-500 p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0'>
                 <MdEmail className='text-white text-xl' />
               </div>
-              <div className='flex-1 min-w-0'>
+              <div className='flex-1 flex flex-col min-w-0'>
                 <h4 className='text-green-800 font-semibold text-base mb-1'>Email Us</h4>
-                <p className='text-blue-600 font-medium hover:underline text-xs truncate'>swapnil.pawar@kalptej.com</p>
-                <p className='text-blue-600 font-medium hover:underline text-xs truncate'>tejas.m@kalptej.com</p>
+                <a href="mailto:swapnil.pawar@kalptej.com" className="text-blue-600 font-medium hover:underline text-xs">
+                  swapnil.pawar@kalptej.com
+                </a>
+                <a href="mailto:tejas.m@kalptej.com" className="text-blue-600 font-medium hover:underline text-xs">
+                  tejas.m@kalptej.com
+                </a>
               </div>
             </div>
 
             {/* Phone */}
-            <div className='flex items-center space-x-4 p-3 h-24 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-lg transition-all duration-300 group cursor-pointer'
-                 onClick={() => window.open('tel:+918669110791', '_blank')}>
+            <div className='flex items-center space-x-4 p-3 h-24 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-lg transition-all duration-300 group cursor-pointer'>
               <div className='bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0'>
                 <MdPhone className='text-white text-xl' />
               </div>
-              <div className='flex-1 min-w-0'>
+              <div className='flex flex-col min-w-0'>
                 <h4 className='text-green-800 font-semibold text-base mb-1'>Call Us</h4>
-                <p className='text-blue-600 font-medium hover:underline text-xs'>(+91) 86691 10791</p>
-                <p className='text-blue-600 font-medium hover:underline text-xs'>(+91) 86007 87934</p>
+                <a href="tel:+918669110791" className="text-blue-600 font-medium hover:underline text-xs block">
+                  (+91) 86691 10791
+                </a>
+                <a href="tel:+918600787934" className="text-blue-600 font-medium hover:underline text-xs block">
+                  (+91) 86007 87934
+                </a>
               </div>
             </div>
           </div>
@@ -138,7 +191,7 @@ const ContactUs = () => {
           {/* Status Messages */}
           {submitStatus === 'success' && (
             <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
-              ✅ Thank you! Your message has been sent successfully.
+              ✅ Thank You! Your request was submitted successfully. We will get back to you soon!
             </div>
           )}
           {submitStatus === 'error' && (
@@ -147,6 +200,7 @@ const ContactUs = () => {
             </div>
           )}
 
+          {/* Name */}
           <div>
             <label htmlFor="name" className='block text-sm font-medium text-green-800 mb-1'>Name *</label>
             <input
@@ -154,14 +208,15 @@ const ContactUs = () => {
               id="name"
               name="name"
               placeholder="Your Name"
-              className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+              className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.name ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.name}
-              required
               disabled={isSubmitting}
             />
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
 
+          {/* Email */}
           <div>
             <label htmlFor="email" className='block text-sm font-medium text-green-800 mb-1'>Email *</label>
             <input
@@ -169,42 +224,58 @@ const ContactUs = () => {
               id="email"
               name="email"
               placeholder="Your Email"
-              className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+              className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.email ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.email}
-              required
               disabled={isSubmitting}
             />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
+          {/* Phone */}
           <div>
-            <label htmlFor="phone" className='block text-sm font-medium text-green-800 mb-1'>Phone</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder="Your Phone Number"
-              className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
-              onChange={handleChange}
-              value={state.phone}
-              disabled={isSubmitting}
-            />
+            <label htmlFor="phone" className="block text-sm font-medium text-green-800 mb-1">Phone *</label>
+            <div
+              className={`flex items-center rounded-lg overflow-hidden shadow-sm border transition-all duration-300 focus-within:ring-2 ${
+                errors.phone
+                  ? "border-red-400 focus-within:ring-red-300"
+                  : "border-gray-300 focus-within:ring-green-400"
+              }`}
+            >
+              <span className="px-4 py-2 bg-gradient-to-r from-green-50 to-amber-50 text-green-700 font-semibold text-sm border-r border-gray-200 select-none tracking-wide">
+                +91
+              </span>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter 10-digit number"
+                className="w-full px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none bg-white"
+                onChange={handleChange}
+                value={state.phone.replace("+91", "")}
+                disabled={isSubmitting}
+              />
+            </div>
+            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
           </div>
 
+          {/* Subject */}
           <div>
-            <label htmlFor="subject" className='block text-sm font-medium text-green-800 mb-1'>Subject</label>
+            <label htmlFor="subject" className='block text-sm font-medium text-green-800 mb-1'>Subject *</label>
             <input
               type="text"
               id="subject"
               name="subject"
               placeholder="Subject"
-              className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+              className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.subject ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.subject}
               disabled={isSubmitting}
             />
+            {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject}</p>}
           </div>
 
+          {/* Message */}
           <div>
             <label htmlFor="message" className='block text-sm font-medium text-green-800 mb-1'>Message *</label>
             <textarea
@@ -212,20 +283,18 @@ const ContactUs = () => {
               name="message"
               placeholder="Your Message"
               rows="4"
-              className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500'
+              className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.message ? "border-red-400" : "border-gray-300"}`}
               onChange={handleChange}
               value={state.message}
-              required
               disabled={isSubmitting}
             />
+            {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
           </div>
 
           <button
             type="submit"
             className={`w-full px-6 py-2 rounded-md transition-colors duration-300 ${
-              isSubmitting 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-green-500 hover:bg-green-600'
+              isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'
             } text-white`}
             disabled={isSubmitting}
           >
@@ -234,7 +303,7 @@ const ContactUs = () => {
         </form>
       </div>
 
-            <span className='h-[1px] w-[75%] bg-black mt-32'></span>
+      <span className='h-[1px] w-[75%] bg-black mt-32'></span>
     </div>
   );
 };

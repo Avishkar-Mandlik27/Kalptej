@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import img from "../assets/services.png";
+import React, { useState, useEffect } from 'react';
+import img from "../assets/services2.jpg";
 import ServiceAccordion from './ServiceAccordion';
 import WelcomePopup from './WelcomePopup';
 
@@ -131,21 +131,25 @@ const packagePlans = {
 const Services = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
+  // ✅ Always scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const toggleExpand = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   return (
-    <div className='w-full flex flex-col items-center justify-center mt-10 mb-20'>
-      
-      <WelcomePopup/>
+    <div className='w-full pt-20 sm:pt-20 md:pt-28 bg-white flex flex-col items-center justify-center mb-20'>
+      <WelcomePopup />
 
       {/* Hero Section */}
       <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative rounded-b-2xl border-[2px] overflow-hidden">
         <img
           src={img}
           className="absolute inset-0 w-full h-full object-cover brightness-75"
-          alt="About Us Background"
+          alt="Services Background"
         />
         <div className="absolute inset-0 flex flex-col justify-center items-start text-left px-6 sm:px-20 md:px-28 lg:px-32 xl:px-40 pt-52">
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold bg-gradient-to-r from-white to-amber-300 bg-clip-text text-transparent drop-shadow-lg leading-tight">
@@ -155,7 +159,7 @@ const Services = () => {
       </div>
 
       {/* Cards Section */}
-      <div className='w-full max-w-[1600px] grid grid-cols-2 gap-x-4 gap-y-16 px-4 sm:px-6 md:px-12 lg:px-20 mt-16'>
+      <div className='w-full max-w-[1600px] grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-12 px-4 sm:px-6 md:px-12 lg:px-20 mt-16'>
         {serviceCards.map((card, index) => {
           const isExpanded = expandedIndex === index;
           const priceText = Array.isArray(card.price)
@@ -165,16 +169,16 @@ const Services = () => {
           return (
             <div
               key={index}
-              className='flex flex-col w-full sm:w-[90%] md:w-[95%] lg:w-[100%] xl:w-[100%] mx-auto bg-white border border-gray-200 rounded-xl p-4 md:p-6 lg:p-8 transition-all duration-300'
+              className='flex flex-col w-full bg-white border border-gray-200 rounded-xl p-5 md:p-6 lg:p-8 transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
             >
-              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-amber-500 brightness-75 mb-2 group cursor-pointer">
+              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-amber-500 brightness-75 mb-3 group cursor-pointer">
                 <span className="relative inline-block">
                   {card.title}
                   <span className="block h-[2px] bg-amber-300 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></span>
                 </span>
               </h2>
 
-              <ul className={`text-sm sm:text-base md:text-lg text-gray-600 list-disc pl-4 ${isExpanded ? '' : 'line-clamp-3'} sm:line-clamp-none`}>
+              <ul className={`text-sm sm:text-base md:text-lg text-gray-600 list-disc pl-4 transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[500px]' : 'max-h-[80px] overflow-hidden'}`}>
                 {card.items.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
@@ -186,6 +190,7 @@ const Services = () => {
                 </p>
               )}
 
+              {/* Read More Toggle (mobile only) */}
               <div className="sm:hidden">
                 <button
                   onClick={() => toggleExpand(index)}
@@ -199,9 +204,8 @@ const Services = () => {
         })}
       </div>
 
-
       {/* Accordion Section */}
-      <div className="w-full max-w-4xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-32"> 
+      <div className="w-full max-w-4xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-32">
         <ServiceAccordion />
       </div>
 
@@ -211,6 +215,3 @@ const Services = () => {
 };
 
 export default Services;
-
-
-

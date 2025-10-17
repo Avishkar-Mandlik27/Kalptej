@@ -11,7 +11,7 @@ const TestimonialCarousel = () => {
                 "KalpTej transformed our office into a biophilic haven. The greenery and acoustic design have boosted both morale and productivity.",
         },
         {
-            company: "CoffeeSas",
+            company: "CoffeeSazz",
             type: "Coffee Shop",
             rating: 4,
             feedback:
@@ -60,7 +60,7 @@ const TestimonialCarousel = () => {
                 Hear what our clients say about working with KalpTej.
             </p>
 
-            <Carousel indicators={false} controls={true} interval={3000} className="max-w-6xl mx-auto">
+            <Carousel indicators={false} controls={true} interval={1500} className="max-w-6xl mx-auto">
                 {groupedTestimonials.map((group, index) => (
                     <Carousel.Item key={index}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 md:px-12 py-6">

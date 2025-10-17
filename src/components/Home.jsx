@@ -52,7 +52,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="pt-32 md:pt-28 bg-white">
+     <div className="pt-20 sm:pt-20 md:pt-28 bg-white">
       <WelcomePopup />
       <HomeCarousel />
 
