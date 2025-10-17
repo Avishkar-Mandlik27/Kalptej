@@ -145,7 +145,7 @@ const Services = () => {
       <WelcomePopup />
 
       {/* Hero Section */}
-      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative rounded-b-2xl border-[2px] overflow-hidden">
+      <div className="w-full h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh] relative border-[2px] overflow-hidden">
         <img
           src={img}
           className="absolute inset-0 w-full h-full object-cover brightness-75"
